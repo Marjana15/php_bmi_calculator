@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Register</title>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
@@ -35,5 +36,44 @@
             <a href="../index.php" class="font-medium text-indigo-600 hover:text-indigo-500"> Sign in </a> <!-- Ensure correct relative path -->
         </p>
     </div>
+
+    <!-- Handling SweetAlert2 popups for registration results -->
+    <?php if (isset($_GET['status'])): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const status = "<?php echo $_GET['status']; ?>";
+                
+                if (status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registered Successfully!',
+                        text: 'Your account has been created.',
+                        confirmButtonText: 'Login Now',
+                        confirmButtonColor: '#3085d6'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '../index.php';
+                        }
+                    });
+                } else if (status === 'duplicate') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Failed',
+                        text: 'Username already exists, please choose another one.',
+                        confirmButtonText: 'Try Again',
+                        confirmButtonColor: '#d33'
+                    });
+                } else if (status === 'error') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong. Please try again.',
+                        confirmButtonText: 'Try Again',
+                        confirmButtonColor: '#d33'
+                    });
+                }
+            });
+        </script>
+    <?php endif; ?>
 </body>
 </html>
